@@ -3,6 +3,7 @@
 
 #include <Adafruit_BME280.h>
 
+// does not use defines in code! Uses default I2C instead.
 #define SDA_PIN 21
 #define SCL_PIN 22
 
