@@ -11,7 +11,7 @@
 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
-void init_bme280();
+uint8_t init_bme280();
 float read_temperature();
 float read_humidity();
 float read_pressure();

@@ -2,7 +2,7 @@
 
 Adafruit_BME280 bme; // I2C
 
-void init_bme280()
+uint8_t init_bme280()
 {
     unsigned status;
     status = bme.begin(I2C_ADDRESS, &Wire);
@@ -12,8 +12,9 @@ void init_bme280()
         Serial.print("SensorID was: 0x");
         Serial.println(bme.sensorID(), 16);
         while (1)
-            delay(10);
+            return 0;
     }
+    return 1;
 }
 
 float read_temperature()
