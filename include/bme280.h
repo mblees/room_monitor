@@ -7,6 +7,8 @@
 #define SDA_PIN 21
 #define SCL_PIN 22
 
+#define I2C_ADDRESS 0x76
+
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 void init_bme280();
