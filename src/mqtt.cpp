@@ -6,6 +6,8 @@ const char *password = "cLCXBX3hugb36tbD";
 const char *mqtt_server = "192.168.0.226";
 const int mqtt_port = 1883;
 
+const char *client_id = "ESP32Client";
+
 WiFiClient espClient;
 PubSubClient client(espClient);
 
@@ -35,7 +37,7 @@ void reconnect()
     {
         Serial.print("Attempting MQTT connection...");
 
-        if (client.connect("ESP32Client"))
+        if (client.connect(client_id))
         {
             Serial.println("connected");
 
