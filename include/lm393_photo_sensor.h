@@ -8,5 +8,6 @@
 
 void init_lm393();
 uint8_t is_light_on();
+float read_photo_diode_value();
 
 #endif // LM393_PHOTO_SENSOR_H
