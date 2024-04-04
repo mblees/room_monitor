@@ -29,11 +29,11 @@ void loop()
     float humidity = read_humidity();
     float pressure = read_pressure();
     float altitude = read_altitude();
-    uint8_t light_status = is_light_on();
+    float light_status = read_photo_diode_value();
 
     // Create a message string to send via MQTT
     char sensor_data_msg[100];
-    snprintf(sensor_data_msg, 100, "Temperature: %.2f°C, Humidity: %.2f%%, Pressure: %.2fhPa, Altitude: %.2fm, Light Status: %d", temperature, humidity, pressure, altitude, light_status);
+    snprintf(sensor_data_msg, 100, "Temperature: %.2f°C, Humidity: %.2f%%, Pressure: %.2fhPa, Altitude: %.2fm, Light Status: %.2f%", temperature, humidity, pressure, altitude, light_status);
     Serial.println(sensor_data_msg);
 
     // Publish sensor data to MQTT topic
