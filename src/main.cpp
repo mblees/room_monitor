@@ -4,19 +4,19 @@
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
   while (!Serial)
     ; // time to get serial running
   delay(1000);
 
-  //init_mqtt();
+  init_mqtt();
   init_bme280();
   init_lm393();
 }
 
 void loop()
 {
-  //mqtt_loop();
+  mqtt_loop();
 
   // Send Sensor Data every 5 seconds
   static unsigned long lastMillis = 0;
@@ -37,6 +37,6 @@ void loop()
     Serial.println(sensor_data_msg);
 
     // Publish sensor data to MQTT topic
-    //send_mqtt_message("Room1", sensor_data_msg);
+    send_mqtt_message("Room1", sensor_data_msg);
   }
 }

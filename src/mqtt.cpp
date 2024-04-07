@@ -3,10 +3,12 @@
 const char *ssid = "KGB";
 const char *password = "cLCXBX3hugb36tbD";
 
-const char *mqtt_server = "192.168.0.226";
+const char *mqtt_server = "192.168.0.115";
 const int mqtt_port = 1883;
 
 const char *client_id = "ESP32Client";
+const char *mqtt_name = "marius";
+const char *mqtt_pass = "admin";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -20,8 +22,9 @@ void init_mqtt()
 
     while (WiFi.status() != WL_CONNECTED)
     {
-        delay(500);
-        Serial.print(".");
+        delay(1000);
+        Serial.print("WiFi connection error: ");
+        Serial.println(WiFi.status());
     }
 
     Serial.println("\nWiFi connected");
@@ -37,7 +40,7 @@ void reconnect()
     {
         Serial.print("Attempting MQTT connection...");
 
-        if (client.connect(client_id))
+        if (client.connect(client_id, mqtt_name, mqtt_pass))
         {
             Serial.println("connected");
 
