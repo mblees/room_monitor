@@ -5,10 +5,7 @@
 void setup()
 {
   Serial.begin(9600);
-  while (!Serial)
-    ; // time to get serial running
-  delay(1000);
-
+  
   init_mqtt();
   init_bme280();
   init_lm393();
@@ -31,12 +28,27 @@ void loop()
     float altitude = read_altitude();
     float light_status = read_photo_diode_value();
 
-    // Create a message string to send via MQTT
+    // Create a message string to send to Serial Monitor
     char sensor_data_msg[100];
     snprintf(sensor_data_msg, 100, "Temperature: %.2f°C, Humidity: %.2f%%, Pressure: %.2fhPa, Altitude: %.2fm, Light Status: %.2f%", temperature, humidity, pressure, altitude, light_status);
     Serial.println(sensor_data_msg);
 
-    // Publish sensor data to MQTT topic
-    send_mqtt_message("Room1", sensor_data_msg);
+    // Publish sensor data to MQTT topics
+    char mqtt_msg[10];
+    
+    dtostrf(temperature, 4, 2, mqtt_msg); // Convert float to string
+    send_mqtt_message("esp01/temperature", mqtt_msg);
+
+    dtostrf(humidity, 4, 2, mqtt_msg);
+    send_mqtt_message("esp01/humidity", mqtt_msg);
+
+    dtostrf(pressure, 6, 2, mqtt_msg);
+    send_mqtt_message("esp01/pressure", mqtt_msg);
+
+    dtostrf(altitude, 6, 2, mqtt_msg);
+    send_mqtt_message("esp01/altitude", mqtt_msg);
+
+    dtostrf(light_status, 4, 2, mqtt_msg);
+    send_mqtt_message("esp01/light_status", mqtt_msg);
   }
 }
