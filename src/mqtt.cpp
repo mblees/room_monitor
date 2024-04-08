@@ -22,9 +22,7 @@ void init_mqtt()
 
     while (WiFi.status() != WL_CONNECTED)
     {
-        delay(1000);
-        Serial.print("WiFi connection error: ");
-        Serial.println(WiFi.status());
+        delay(500);
     }
 
     Serial.println("\nWiFi connected");
