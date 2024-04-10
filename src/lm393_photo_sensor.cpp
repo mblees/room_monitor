@@ -3,6 +3,8 @@
 void init_lm393()
 {
     pinMode(lm393_data_pin, INPUT);
+    pinMode(lm393_power_pin, OUTPUT);
+    digitalWrite(lm393_power_pin, HIGH);
 }
 
 uint8_t is_light_on()

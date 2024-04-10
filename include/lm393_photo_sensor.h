@@ -4,6 +4,7 @@
 #include <arduino.h>
 
 #define lm393_data_pin 34
+#define lm393_power_pin 35
 #define ADC_RESOLUTION 4095
 
 void init_lm393();
