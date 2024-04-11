@@ -19,7 +19,9 @@ void setup()
   start_time = millis();
 
   Serial.begin(9600);
-  Serial.println("Arrived in setup()");
+  #if DEBUG_ENABLE == 1
+    Serial.println("Arrived in setup()");
+  #endif
 
   init_mqtt();
   init_bme280();
