@@ -6,15 +6,18 @@
 
 #define uS_TO_S_FACTOR 1000000 /* Conversion factor for micro seconds to seconds */
 #define mS_TO_S_FACTOR 1000    /* Conversion factor for milliseconds to seconds */
-#define TIME_TO_SLEEP 20        /* Time ESP32 will go to sleep (in seconds) */
+#define TIME_TO_SLEEP 20       /* Time ESP32 will go to sleep (in seconds) */
+#define MAX_MESSAGE_LENGTH 100
 
 RTC_DATA_ATTR int bootCount;
+uint16_t start_time = 0;
 
-void do_work(void);
+void publish_sensor_data(void);
+void deep_sleep(void);
 
 void setup()
 {
-  uint16_t start_time = millis();
+  start_time = millis();
 
   Serial.begin(9600);
   Serial.println("Arrived in setup()");
@@ -22,29 +25,23 @@ void setup()
   init_mqtt();
   init_bme280();
   init_lm393();
+  mqtt_loop();
 
-  do_work();
-  
-  Serial.println("Going to sleep now");
-  uint16_t time_awake = millis() - start_time;
-  Serial.println("Total time awake: " + String(time_awake) + "ms");
-
-  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR - (time_awake * mS_TO_S_FACTOR));
-  delay(200); // without this the deep sleep doesnt work properly
-  esp_deep_sleep_start();
+  publish_sensor_data();
+  deep_sleep();
 }
 
 void loop()
 {
-  Serial.println("Arrived in loop()");
+  // loop is never called cause of deep sleep
 }
 
-void do_work()
+void publish_sensor_data()
 {
-  mqtt_loop();
-
   bootCount++;
-  Serial.println("Boot number: " + String(bootCount));
+  #if DEBUG_ENABLE == 1
+    Serial.println("Boot number: " + String(bootCount));
+  #endif
 
   // Read sensor data
   float temperature = read_temperature();
@@ -54,8 +51,8 @@ void do_work()
   float light_status = read_photo_diode_value();
 
   // Create a message string to send to Serial Monitor
-  char sensor_data_msg[100];
-  snprintf(sensor_data_msg, 100, "Temperature: %.2f°C, Humidity: %.2f%%, Pressure: %.2fhPa, Altitude: %.2fm, Light Status: %.2f%", temperature, humidity, pressure, altitude, light_status);
+  char sensor_data_msg[MAX_MESSAGE_LENGTH];
+  snprintf(sensor_data_msg, MAX_MESSAGE_LENGTH, "Temperature: %.2f°C, Humidity: %.2f%%, Pressure: %.2fhPa, Altitude: %.2fm, Light Status: %.2f%", temperature, humidity, pressure, altitude, light_status);
   Serial.println(sensor_data_msg);
 
   // Publish sensor data to MQTT topics
@@ -75,4 +72,18 @@ void do_work()
 
   dtostrf(light_status, 4, 2, mqtt_msg);
   send_mqtt_message(MQTT_TOPIC_LIGHT_STATUS, mqtt_msg);
+}
+
+void deep_sleep()
+{
+  uint16_t time_awake = millis() - start_time;
+
+  #if DEBUG_ENABLE == 1
+  Serial.println("Going to sleep now");
+    Serial.println("Total time awake: " + String(time_awake) + "ms");
+  #endif
+
+  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR - (time_awake * mS_TO_S_FACTOR));
+  delay(200); // without this the deep sleep doesnt work properly
+  esp_deep_sleep_start();
 }

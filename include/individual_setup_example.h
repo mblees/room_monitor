@@ -3,6 +3,8 @@
 
 // to get this to work you need to create a file called individual_setup.h in the include folder
 
+#define DEBUG_ENABLE 1          // Change this to 1 to enable debugging
+
 #define SSID ""
 #define PASSWORD ""
 
