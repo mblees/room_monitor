@@ -1,6 +1,7 @@
 #include "mqtt.h"
 #include "bme280.h"
 #include "lm393_photo_sensor.h"
+#include "individual_setup.h"
 #include <time.h>
 
 #define uS_TO_S_FACTOR 1000000 /* Conversion factor for micro seconds to seconds */
@@ -61,17 +62,17 @@ void do_work()
   char mqtt_msg[10];
 
   dtostrf(temperature, 4, 2, mqtt_msg); // Convert float to string
-  send_mqtt_message("esp01/temperature", mqtt_msg);
+  send_mqtt_message(MQTT_TOPIC_TEMPERATURE, mqtt_msg);
 
   dtostrf(humidity, 4, 2, mqtt_msg);
-  send_mqtt_message("esp01/humidity", mqtt_msg);
+  send_mqtt_message(MQTT_TOPIC_HUMIDITY, mqtt_msg);
 
   dtostrf(pressure, 6, 2, mqtt_msg);
-  send_mqtt_message("esp01/pressure", mqtt_msg);
+  send_mqtt_message(MQTT_TOPIC_PRESSURE, mqtt_msg);
 
   dtostrf(altitude, 6, 2, mqtt_msg);
-  send_mqtt_message("esp01/altitude", mqtt_msg);
+  send_mqtt_message(MQTT_TOPIC_ALTITUDE, mqtt_msg);
 
   dtostrf(light_status, 4, 2, mqtt_msg);
-  send_mqtt_message("esp01/light_status", mqtt_msg);
+  send_mqtt_message(MQTT_TOPIC_LIGHT_STATUS, mqtt_msg);
 }

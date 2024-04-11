@@ -1,15 +1,5 @@
 #include "mqtt.h"
 
-const char *ssid = "KGB";
-const char *password = "cLCXBX3hugb36tbD";
-
-const char *mqtt_server = "192.168.0.115";
-const int mqtt_port = 1883;
-
-const char *client_id = "ESP32Client";
-const char *mqtt_name = "marius";
-const char *mqtt_pass = "admin";
-
 WiFiClient espClient;
 PubSubClient client(espClient);
 
@@ -18,7 +8,7 @@ uint8_t is_client_connected();
 
 void init_mqtt()
 {
-    WiFi.begin(ssid, password);
+    WiFi.begin(SSID, PASSWORD);
 
     while (WiFi.status() != WL_CONNECTED)
     {
@@ -29,7 +19,7 @@ void init_mqtt()
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
 
-    client.setServer(mqtt_server, mqtt_port);
+    client.setServer(MQTT_SERVER, MQTT_PORT);
 }
 
 void reconnect()
@@ -38,7 +28,7 @@ void reconnect()
     {
         Serial.print("Attempting MQTT connection...");
 
-        if (client.connect(client_id, mqtt_name, mqtt_pass))
+        if (client.connect(CLIENT_ID, MQTT_NAME, MQTT_PASS))
         {
             Serial.println("connected");
 
