@@ -6,7 +6,6 @@
 
 #define uS_TO_S_FACTOR 1000000 /* Conversion factor for micro seconds to seconds */
 #define mS_TO_S_FACTOR 1000    /* Conversion factor for milliseconds to seconds */
-#define TIME_TO_SLEEP 20       /* Time ESP32 will go to sleep (in seconds) */
 #define MAX_MESSAGE_LENGTH 100
 
 RTC_DATA_ATTR int bootCount;
@@ -53,8 +52,9 @@ void publish_sensor_data()
   // Create a message string to send to Serial Monitor
   char sensor_data_msg[MAX_MESSAGE_LENGTH];
   snprintf(sensor_data_msg, MAX_MESSAGE_LENGTH, "Temperature: %.2f°C, Humidity: %.2f%%, Pressure: %.2fhPa, Altitude: %.2fm, Light Status: %.2f%", temperature, humidity, pressure, altitude, light_status);
-  Serial.println(sensor_data_msg);
-
+  #if DEBUG_ENABLE == 1
+    Serial.println(sensor_data_msg);
+  #endif
   // Publish sensor data to MQTT topics
   char mqtt_msg[10];
 

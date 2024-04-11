@@ -11,8 +11,7 @@ uint8_t init_bme280()
         Serial.println("Could not find a valid BME280 sensor, check wiring, address, sensor ID!");
         Serial.print("SensorID was: 0x");
         Serial.println(bme.sensorID(), 16);
-        while (1)
-            return 0;
+        return 0;
     }
     return 1;
 }

@@ -15,9 +15,11 @@ void init_mqtt()
         delay(500);
     }
 
-    Serial.println("\nWiFi connected");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
+    #if ENABLE_DEBUG == 1
+        Serial.println("\nWiFi connected");
+        Serial.println("IP address: ");
+        Serial.println(WiFi.localIP());
+    #endif
 
     client.setServer(MQTT_SERVER, MQTT_PORT);
 }
@@ -26,21 +28,25 @@ void reconnect()
 {
     while (!client.connected())
     {
-        Serial.print("Attempting MQTT connection...");
+        #if ENABLE_DEBUG == 1
+            Serial.print("Attempting MQTT connection...");
+        #endif
 
         if (client.connect(CLIENT_ID, MQTT_NAME, MQTT_PASS))
         {
-            Serial.println("connected");
-
-            client.subscribe("testTopic");
+            #if ENABLE_DEBUG == 1
+                Serial.println("connected");
+            #endif
         }
         else
         {
-            Serial.print("failed, rc=");
-            Serial.print(client.state());
-            Serial.println(" try again in 5 seconds");
+            #if ENABLE_DEBUG == 1
+                Serial.print("failed, rc=");
+                Serial.print(client.state());
+                Serial.println(" try again in 1 second");
+            #endif
 
-            delay(5000);
+            delay(1000);
         }
     }
 }

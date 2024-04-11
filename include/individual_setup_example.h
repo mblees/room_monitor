@@ -4,6 +4,7 @@
 // to get this to work you need to create a file called individual_setup.h in the include folder
 
 #define DEBUG_ENABLE 1          // Change this to 1 to enable debugging
+#define TIME_TO_SLEEP 20        // Time ESP32 will go to sleep (in seconds)
 
 #define SSID ""
 #define PASSWORD ""
