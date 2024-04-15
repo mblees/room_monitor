@@ -2,18 +2,13 @@
 #include "bme280.h"
 #include "lm393_photo_sensor.h"
 #include "individual_setup.h"
+#include "deep_sleep.h"
 #include <time.h>
-
-#define uS_TO_S_FACTOR 1000000 /* Conversion factor for micro seconds to seconds */
-#define mS_TO_S_FACTOR 1000    /* Conversion factor for milliseconds to seconds */
-#define MAX_MESSAGE_LENGTH 100
 
 RTC_DATA_ATTR int bootCount;
 uint16_t start_time = 0;
 
 void publish_sensor_data(void);
-void deep_sleep(void);
-
 void setup()
 {
   start_time = millis();
@@ -29,7 +24,7 @@ void setup()
   mqtt_loop();
 
   publish_sensor_data();
-  deep_sleep();
+  deep_sleep(start_time);
 }
 
 void loop()
@@ -80,21 +75,3 @@ void publish_sensor_data()
   }
 }
 
-void deep_sleep()
-{
-  uint16_t time_awake = millis() - start_time;
-
-  #if DEBUG_ENABLE == 1
-    Serial.println("Going to sleep now");
-    Serial.println("Total time awake: " + String(time_awake) + "ms");
-  #endif
-  
-  uint32_t calculated_sleep_time = TIME_TO_SLEEP * uS_TO_S_FACTOR - (time_awake * mS_TO_S_FACTOR);
-  if(calculated_sleep_time < 0){
-    calculated_sleep_time = TIME_TO_SLEEP * uS_TO_S_FACTOR;
-  }
-
-  esp_sleep_enable_timer_wakeup(calculated_sleep_time);
-  delay(200); // without this the deep sleep doesnt work properly
-  esp_deep_sleep_start();
-}

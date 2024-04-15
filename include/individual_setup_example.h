@@ -24,4 +24,8 @@
 #define MQTT_TOPIC_ALTITUDE     MQTT_ESP_ID"/altitude"
 #define MQTT_TOPIC_LIGHT_STATUS MQTT_ESP_ID"/light_status"
 
+#define uS_TO_S_FACTOR 1000000 /* Conversion factor for micro seconds to seconds */
+#define mS_TO_S_FACTOR 1000    /* Conversion factor for milliseconds to seconds */
+#define MAX_MESSAGE_LENGTH 100
+
 #endif // INDIVIDUAL_SETUP_H
