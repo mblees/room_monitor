@@ -69,9 +69,5 @@ void publish_sensor_data()
 
   dtostrf(light_status, 4, 2, mqtt_msg);
   send_mqtt_message(MQTT_TOPIC_LIGHT_STATUS, mqtt_msg);
-
-  if(bootCount == 1){
-    send_mqtt_message(MQTT_TOPIC_BOOT_RESET, "1");
-  }
 }
 
